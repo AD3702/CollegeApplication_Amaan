@@ -32,7 +32,7 @@
             android:textSize="20dp"
             android:padding="10dp"
             android:layout_margin="10dp"
-            android:fontFamily="@font/comicneue_regular"
+            android:fontFamily="@font/opensanslight"
             android:text="Please upload your photo to continue."
             android:textStyle="bold"
             android:textColor="@color/black"/>
@@ -58,7 +58,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="25dp"
-        android:fontFamily="@font/comicneue_regular"
+        android:fontFamily="@font/opensanslight"
         android:text="Upload Image"
         android:textColor="@color/white" />
 
@@ -70,7 +70,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="25dp"
-        android:fontFamily="@font/comicneue_regular"
+        android:fontFamily="@font/opensanslight"
         android:text="Continue"
         android:textColor="@color/white"
         android:visibility="invisible"/>

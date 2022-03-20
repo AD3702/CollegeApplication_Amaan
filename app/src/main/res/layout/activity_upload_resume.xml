@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:fontFamily="@font/comicneue_regular"
+                android:fontFamily="@font/opensanslight"
                 android:padding="10dp"
                 android:text="Please Upload your resume to continue"
                 android:textColor="@color/black"
@@ -51,7 +51,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="25dp"
-        android:fontFamily="@font/comicneue_regular"
+        android:fontFamily="@font/opensanslight"
         android:text="Upload PDF"
         android:theme="@style/ButtonLogin_SignUp2"
         android:visibility="invisible" />
@@ -64,7 +64,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="25dp"
-        android:fontFamily="@font/comicneue_regular"
+        android:fontFamily="@font/opensanslight"
         android:text="Select Resume"
         android:theme="@style/ButtonLogin_SignUp2" />
 
@@ -76,7 +76,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="25dp"
-        android:fontFamily="@font/comicneue_regular"
+        android:fontFamily="@font/opensanslight"
         android:text="Continue"
         android:textColor="@color/white"
         android:visibility="invisible" />

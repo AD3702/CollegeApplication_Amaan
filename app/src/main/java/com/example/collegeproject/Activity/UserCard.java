@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,16 +18,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import com.example.collegeproject.Adapter.DownLoadImageTask;
 import com.example.collegeproject.Database.APIInterface;
 import com.example.collegeproject.Database.AppClient;
 import com.example.collegeproject.Database.Registrationdatum;
 import com.example.collegeproject.Database.UserData;
 import com.example.collegeproject.R;
+import com.example.collegeproject.Room.Offline_User_Data;
+import com.example.collegeproject.Room.RoomDB;
 import com.lib.customedittext.CustomEditText;
 import com.tuyenmonkey.mkloader.MKLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -44,7 +47,7 @@ public class UserCard extends AppCompatActivity implements View.OnClickListener 
     TextView card_area, card_area_1, card_area_2;
     TextView card_location, card_location_1, card_location_2;
     String user_name, user_education, user_area, user_location, edit_education_1, edit_education_2;
-    ArrayList<Registrationdatum> editprofdatalist;
+    ArrayList<Registrationdatum> editprofdatalist_online;
     String get_user_id;
     SharedPreferences sharedPreferences;
     public static final String mypreference = "mypref";
@@ -54,6 +57,9 @@ public class UserCard extends AppCompatActivity implements View.OnClickListener 
     Button edit_card_btn_save;
     CustomEditText card_username_edit, card_area_edit, card_location_edit;
     int card_type, card_type_temp;
+    RoomDB roomDB_user_card;
+    List<Offline_User_Data> editprofdatalist;
+    Uri user_card_image_uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +67,34 @@ public class UserCard extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_user_card);
         initializeUI();
         toolbar_setup();
-        Intent sharedprefIntent = getIntent();
+        Intent usercard_image_intent = getIntent();
+        user_card_image_uri = usercard_image_intent.getData();
         sharedPref();
-        loadData();
+        load_edit_card_offline_date();
         left_btn.setOnClickListener(this);
         right_btn.setOnClickListener(this);
         edit_card_btn.setOnClickListener(this);
         edit_card_btn_save.setOnClickListener(this);
+    }
+
+    public void load_edit_card_offline_date() {
+        try {
+            roomDB_user_card = RoomDB.getInstance(this.getApplicationContext());
+            editprofdatalist = roomDB_user_card.userDao().getlistData();
+            user_name = editprofdatalist.get(0).getUser_name();
+            edit_education_1 = editprofdatalist.get(0).getUser_college_degree();
+            edit_education_2 = editprofdatalist.get(0).getUser_semester();
+            user_area = editprofdatalist.get(0).getUser_area();
+            user_location = editprofdatalist.get(0).getUser_location();
+            card_type = editprofdatalist.get(0).getUser_card_type();
+            user_card_image_string = editprofdatalist.get(0).getUser_profile_image();
+            card_loader.setVisibility(View.INVISIBLE);
+            setCard_type();
+            setdetails_pre();
+
+        } catch (Exception e) {
+            Log.e("OFFLINE ERROR", String.valueOf(e));
+        }
     }
 
 
@@ -162,36 +189,36 @@ public class UserCard extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
-    public void loadData() {
-        APIInterface apiInterface = AppClient.getclient().create(APIInterface.class);
-        Call<UserData> registrationCall = apiInterface.find_user_id(get_user_id);
-        registrationCall.enqueue(new Callback<UserData>() {
-            @Override
-            public void onResponse(Call<UserData> call, Response<UserData> response) {
-                try {
-                    editprofdatalist = (ArrayList<Registrationdatum>) response.body().getRegistrationdata();
-                    user_name = editprofdatalist.get(0).getUserName();
-                    edit_education_1 = editprofdatalist.get(0).getUserCollegeDegree();
-                    edit_education_2 = editprofdatalist.get(0).getUserSemester();
-                    user_area = editprofdatalist.get(0).getUserArea();
-                    user_location = editprofdatalist.get(0).getUserLocation();
-                    card_type = Integer.parseInt(editprofdatalist.get(0).getUserCardType());
-                    user_card_image_string = editprofdatalist.get(0).getUserProfileImage();
-                    setCard_type();
-                    setdetails_pre();
-
-                } catch (Exception e) {
-
-                }
-                card_loader.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onFailure(Call<UserData> call, Throwable t) {
-
-            }
-        });
-    }
+//    public void loadData() {
+//        APIInterface apiInterface = AppClient.getclient().create(APIInterface.class);
+//        Call<UserData> registrationCall = apiInterface.find_user_id(get_user_id);
+//        registrationCall.enqueue(new Callback<UserData>() {
+//            @Override
+//            public void onResponse(Call<UserData> call, Response<UserData> response) {
+//                try {
+//                    editprofdatalist = (ArrayList<Registrationdatum>) response.body().getRegistrationdata();
+//                    user_name = editprofdatalist.get(0).getUserName();
+//                    edit_education_1 = editprofdatalist.get(0).getUserCollegeDegree();
+//                    edit_education_2 = editprofdatalist.get(0).getUserSemester();
+//                    user_area = editprofdatalist.get(0).getUserArea();
+//                    user_location = editprofdatalist.get(0).getUserLocation();
+//                    card_type = Integer.parseInt(editprofdatalist.get(0).getUserCardType());
+//                    user_card_image_string = editprofdatalist.get(0).getUserProfileImage();
+//                    setCard_type();
+//                    setdetails_pre();
+//
+//                } catch (Exception e) {
+//
+//                }
+//                card_loader.setVisibility(View.INVISIBLE);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<UserData> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
     public void setdetails_pre() {
         card_name.setText(user_name);
@@ -210,9 +237,11 @@ public class UserCard extends AppCompatActivity implements View.OnClickListener 
         card_username_edit.setText(user_name);
         card_area_edit.setText(user_area);
         card_location_edit.setText(user_location);
-        Toast.makeText(UserCard.this, "" + user_card_image_string, Toast.LENGTH_SHORT).show();
-        new DownLoadImageTask(user_card_image, card_loader).execute(user_card_image_string);
-        new DownLoadImageTask(user_card_image1, card_loader).execute(user_card_image_string);
+//        Toast.makeText(UserCard.this, "" + user_card_image_string, Toast.LENGTH_SHORT).show();
+//        new DownLoadImageTask(user_card_image, card_loader_image).execute(user_card_image_string);
+//        new DownLoadImageTask(user_card_image1, card_loader_image_1).execute(user_card_image_string);
+        user_card_image.setImageURI(user_card_image_uri);
+        user_card_image1.setImageURI(user_card_image_uri);
     }
 
     public void setData_edit() {
@@ -222,7 +251,13 @@ public class UserCard extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void onResponse(Call<UserData> call, Response<UserData> response) {
                 try {
-                    editprofdatalist = (ArrayList<Registrationdatum>) response.body().getRegistrationdata();
+                    Offline_User_Data offline_user_data = editprofdatalist.get(0);
+                    offline_user_data.setUser_name(user_name);
+                    offline_user_data.setUser_area(user_area);
+                    offline_user_data.setUser_location(user_location);
+                    offline_user_data.setUser_card_type(card_type);
+                    roomDB_user_card.userDao().update_edit_prof(offline_user_data);
+                    Toast.makeText(UserCard.this, "" + editprofdatalist.get(0).getUser_address(), Toast.LENGTH_SHORT).show();
                     setdetails_post();
 
                 } catch (Exception e) {

@@ -76,7 +76,7 @@ public class ContactUs extends AppCompatActivity implements View.OnClickListener
         if (view == whatsapp_intent) {
             try {
 
-                Uri mUri = Uri.parse("https://api.whatsapp.com/send?phone=+919016395600&text=");
+                Uri mUri = Uri.parse("https://api.whatsapp.com/send?phone=+917572877843&text=Hi I would like to talk to Mr.Amaan Dhanerawala");
                 Intent intent = new Intent("android.intent.action.VIEW", mUri);
                 intent.setPackage("com.whatsapp");
                 startActivity(intent);

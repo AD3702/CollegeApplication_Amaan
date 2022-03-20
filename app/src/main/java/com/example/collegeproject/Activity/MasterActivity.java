@@ -1,10 +1,8 @@
 package com.example.collegeproject.Activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -23,7 +21,7 @@ public class MasterActivity extends AppCompatActivity implements SpaceOnClickLis
     SharedPreferences sharedPreferences;
     Bundle savedInstanceState;
     private long pressedTime;
-    public static Activity masteractivity;
+    public static MasterActivity masteractivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +49,13 @@ public class MasterActivity extends AppCompatActivity implements SpaceOnClickLis
         HomeFragment home = new HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.nav_host_fragment, home);
+        ft.commit();
+    }
+
+    public void oneditprofbackpressed() {
+        SettingsFragment settingsFragment = new SettingsFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.nav_host_fragment, settingsFragment);
         ft.commit();
     }
 
@@ -124,7 +129,10 @@ public class MasterActivity extends AppCompatActivity implements SpaceOnClickLis
             MainActivity.mainActivity.finish();
             finish();
         } else {
-            Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+            HomeFragment home = new HomeFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.nav_host_fragment, home);
+            ft.commit();
         }
         pressedTime = System.currentTimeMillis();
     }

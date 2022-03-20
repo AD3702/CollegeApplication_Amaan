@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.tuyenmonkey.mkloader.MKLoader;
 
@@ -30,12 +29,12 @@ public class SendMailForgot extends AsyncTask<Void, Void, Void> {
     private String subject;
     private String message;
     private MKLoader mkLoader;
-    private LinearLayout linearLayout;
+    private LinearLayout linearLayout, resend_otp_layout;
 
     //Progressdialog to show while sending email
 
     //Class Constructor
-    public SendMailForgot(Context context, String email, String subject, String message, MKLoader mkLoader,LinearLayout linearLayout) {
+    public SendMailForgot(Context context, String email, String subject, String message, MKLoader mkLoader, LinearLayout linearLayout, LinearLayout resend_otp_layout) {
         //Initializing variables
         this.context = context;
         this.email = email;
@@ -43,6 +42,7 @@ public class SendMailForgot extends AsyncTask<Void, Void, Void> {
         this.subject = subject;
         this.message = message;
         this.mkLoader = mkLoader;
+        this.resend_otp_layout = resend_otp_layout;
     }
 
     @Override
@@ -58,6 +58,7 @@ public class SendMailForgot extends AsyncTask<Void, Void, Void> {
         //Dismissing the progress dialog
         mkLoader.setVisibility(View.INVISIBLE);
         linearLayout.setVisibility(View.VISIBLE);
+        resend_otp_layout.setVisibility(View.VISIBLE);
         //Showing a success message
 //        Toast.makeText(context, "Email Sent", Toast.LENGTH_LONG).show();
     }

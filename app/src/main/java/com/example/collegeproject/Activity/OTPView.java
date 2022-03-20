@@ -66,7 +66,7 @@ public class OTPView extends AppCompatActivity implements OTPListener, View.OnCl
         Random_number();
         sharedPref();
         try {
-            SendMail sendMail = new SendMail(OTPView.this, register_Email, "Conformation", "New Registration request has been sent for you account.\nIf its not you kindly ignore this email.\nTo register your OTP is: " + random_otp, mkLoader_otp);
+            SendMail sendMail = new SendMail(OTPView.this, register_Email, "Confirmation", "New Registration request has been sent for you account.\nIf its not you kindly ignore this email.\nTo register your OTP is: " + random_otp, mkLoader_otp);
             sendMail.execute();
         } catch (Exception e) {
 

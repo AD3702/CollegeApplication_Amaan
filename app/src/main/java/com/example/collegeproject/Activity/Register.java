@@ -12,10 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.collegeproject.Database.APIInterface;
@@ -23,6 +25,11 @@ import com.example.collegeproject.Database.AppClient;
 import com.example.collegeproject.Database.Registrationdatum;
 import com.example.collegeproject.Database.UserData;
 import com.example.collegeproject.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.tuyenmonkey.mkloader.MKLoader;
@@ -38,17 +45,18 @@ import retrofit2.Response;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
 
-    TextView main_register_text;
+    TextView main_register_text,register_dob;
     ImageView header_image_register;
     Spinner register_spinner_semester, register_degree_spinner;
-    public static TextInputEditText register_name, register_email, register_contact, register_address, register_area, register_location, register_dob, register_password, register_college_name;
-    TextInputLayout register_name_layout, register_email_layout, register_contact_layout, register_address_layout, register_area_layout, register_location_layout, register_dob_layout, register_password_layout, register_college_name_layout;
+    public static TextInputEditText register_name, register_email, register_contact, register_address, register_area, register_location, register_password, register_college_name;
+    TextInputLayout register_name_layout, register_email_layout, register_contact_layout, register_address_layout, register_area_layout, register_location_layout, register_password_layout, register_college_name_layout;
     List<String> semester = new ArrayList<String>();
     List<String> degree = new ArrayList<String>();
     private int mYear, mMonth, mDay;
     DatePickerDialog datePickerDialog;
     MKLoader register_loader;
     Random random;
+    LinearLayout register_dob_layout;
     Button signup;
     ImageView olduser;
     public static Activity registerActivity;
@@ -68,12 +76,22 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     public static final String REGISTER_COLLEGE_SEMESTER = "register_college_semester";
     public static final String REGISTER_COLLEGE_DEGREE = "register_college_degree";
     float v = 0;
+    GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         initializeUI();
+        SharedPreferences sharedPreferences = getSharedPreferences(mypreference, MODE_PRIVATE);
+        register_Email = sharedPreferences.getString(REGISTER_EMAIL, "");
+        if (register_Email.equals("")) {
+
+        } else {
+            register_email.setText(register_Email);
+            register_email_layout.setEnabled(false);
+            register_email.setEnabled(false);
+        }
         setSpinner();
         animation();
         register_spinner_semester.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -98,9 +116,25 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
             }
         });
-        register_dob_layout.setOnClickListener(this);
         olduser.setOnClickListener(this);
         signup.setOnClickListener(this);
+        register_dob_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                datePickerDialog = new DatePickerDialog(Register.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                        register_dob.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                    }
+                }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
     }
 
     public void initializeUI() {
@@ -217,23 +251,18 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         if (view == olduser) {
-            startActivity(new Intent(Register.this, Login.class));
-            overridePendingTransition(R.anim.slide_in_left, android.R.anim.slide_out_right);
-            finish();
-        }
-        if (view == register_dob_layout) {
-            final Calendar c = Calendar.getInstance();
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
-
-            datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+            mGoogleSignInClient = GoogleSignIn.getClient(Register.this, gso);
+            mGoogleSignInClient.signOut().addOnCompleteListener(Register.this, new OnCompleteListener<Void>() {
                 @Override
-                public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                    register_dob.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                public void onComplete(@NonNull Task<Void> task) {
+                    startActivity(new Intent(Register.this, Login.class));
+                    overridePendingTransition(R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    finish();
                 }
-            }, mYear, mMonth, mDay);
-            datePickerDialog.show();
+            });
         }
         if (view == signup) {
             register_Name = register_name.getText().toString();
@@ -409,9 +438,18 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(Register.this, Login.class));
-        overridePendingTransition(R.anim.slide_in_left, android.R.anim.slide_out_right);
-        finish();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(Register.this, gso);
+        mGoogleSignInClient.signOut().addOnCompleteListener(Register.this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                startActivity(new Intent(Register.this, Login.class));
+                overridePendingTransition(R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+            }
+        });
     }
 
 }

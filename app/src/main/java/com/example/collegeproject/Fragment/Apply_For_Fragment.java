@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -200,7 +198,11 @@ public class Apply_For_Fragment extends Fragment {
         applicationDataCall.enqueue(new Callback<ApplicationData>() {
             @Override
             public void onResponse(Call<ApplicationData> call, Response<ApplicationData> response) {
-                applicationdatumArrayList_jobtype = (ArrayList<Applicationdatum>) response.body().getApplicationdata();
+                try {
+                    applicationdatumArrayList_jobtype = (ArrayList<Applicationdatum>) response.body().getApplicationdata();
+                } catch (Exception e) {
+
+                }
             }
 
             @Override

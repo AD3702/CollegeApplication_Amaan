@@ -74,6 +74,7 @@ public class UploadResume extends AppCompatActivity implements View.OnClickListe
     private long pressedTime;
     String isloggedin;
     String permission_denied;
+    Uri profile_image_upload_resume;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -83,8 +84,10 @@ public class UploadResume extends AppCompatActivity implements View.OnClickListe
         checkWriteExternalPermission();
         initializeUI();
         toolbar_setup();
-        getIntent();
+        Intent intent_profile_image = getIntent();
+        profile_image_upload_resume = intent_profile_image.getData();
         sharedPref();
+        Toast.makeText(UploadResume.this, "" + temp_user_id, Toast.LENGTH_SHORT).show();
         if (resume_check.equals("")) {
             main_pdf_image.setVisibility(View.VISIBLE);
         } else {
@@ -130,9 +133,14 @@ public class UploadResume extends AppCompatActivity implements View.OnClickListe
             uploadFile();
         }
         if (view == next_activity_btn_2) {
-            if (verify_id.equals("1")) {
-                startActivity(new Intent(UploadResume.this, MasterActivity.class));
-            }
+            Intent intent_main = new Intent(UploadResume.this, MasterActivity.class);
+            intent_main.setData(profile_image_upload_resume);
+            startActivity(intent_main);
+            sharedPreferences = getSharedPreferences(mypreference, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            isloggedin = "logged_in";
+            editor.putString(LOGGED_IN, isloggedin);
+            editor.commit();
         }
     }
 
@@ -469,7 +477,7 @@ public class UploadResume extends AppCompatActivity implements View.OnClickListe
                 finish();
                 sharedPreferences = getSharedPreferences(mypreference, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                isloggedin = "logged_in";
+                isloggedin = "logged_out";
                 editor.putString(LOGGED_IN, isloggedin);
                 editor.commit();
                 startActivity(new Intent(UploadResume.this, Login.class));
@@ -481,5 +489,4 @@ public class UploadResume extends AppCompatActivity implements View.OnClickListe
             finish();
         }
     }
-
 }

@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/fab_link"
-        android:icon="@drawable/ic_link_white_24dp"
-        android:title="Add link" />
+        android:id="@+id/normal_map"
+        android:icon="@drawable/normal_map"
+        android:title="Normal" />
 
     <item
-        android:id="@+id/fab_add"
-        android:icon="@drawable/ic_add_alarm_white_24dp"
-        android:title="@string/fab_1" />
+        android:id="@+id/terrain_map"
+        android:icon="@drawable/terrain_map"
+        android:title="Terrain" />
 
     <item
-        android:id="@+id/fab_write"
-        android:icon="@drawable/text"
-        android:title="Add Text" />
+        android:id="@+id/satellite_map"
+        android:icon="@drawable/satellite_map"
+        android:title="Satellite" />
 
-    <item
-        android:id="@+id/fab_image"
-        android:icon="@drawable/image"
-        android:title="Add Image" />
-
-    <item
-        android:id="@+id/fab_docs"
-        android:icon="@drawable/docs"
-        android:title="Add Docs" />
 </menu>

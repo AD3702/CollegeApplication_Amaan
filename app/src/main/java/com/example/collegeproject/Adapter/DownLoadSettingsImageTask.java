@@ -5,7 +5,9 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.example.collegeproject.Fragment.SettingsFragment;
 import com.tuyenmonkey.mkloader.MKLoader;
 
 import java.io.InputStream;
@@ -13,20 +15,17 @@ import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DownLoadImageTask extends AsyncTask<String, Void, Bitmap> {
+public class DownLoadSettingsImageTask extends AsyncTask<String, Void, Bitmap> {
     CircleImageView imageView;
     MKLoader mkLoader;
     ImageView imageView_settings_alpha;
+    LinearLayout linearLayout;
 
-    public DownLoadImageTask(CircleImageView imageView, MKLoader mkLoader) {
-        this.imageView = imageView;
-        this.mkLoader = mkLoader;
-    }
-
-    public DownLoadImageTask(CircleImageView imageView, MKLoader mkLoader, ImageView imageView_settings_alpha) {
+    public DownLoadSettingsImageTask(CircleImageView imageView, MKLoader mkLoader, ImageView imageView_settings_alpha/*, LinearLayout linearLayout*/) {
         this.imageView = imageView;
         this.mkLoader = mkLoader;
         this.imageView_settings_alpha = imageView_settings_alpha;
+        /*this.linearLayout = linearLayout;*/
     }
 
     /*
@@ -56,11 +55,8 @@ public class DownLoadImageTask extends AsyncTask<String, Void, Bitmap> {
     protected void onPostExecute(Bitmap result) {
         imageView.setImageBitmap(result);
         mkLoader.setVisibility(View.INVISIBLE);
-        try {
-            imageView_settings_alpha.setVisibility(View.INVISIBLE);
-        } catch (Exception e) {
-
-        }
+        imageView_settings_alpha.setVisibility(View.INVISIBLE);
+        SettingsFragment.settingsFragment.setclickable_settings();
     }
 }
 

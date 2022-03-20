@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -31,6 +32,9 @@ import com.example.collegeproject.Database.APIInterface;
 import com.example.collegeproject.Database.AppClient;
 import com.example.collegeproject.Database.ServerResponse;
 import com.example.collegeproject.R;
+import com.example.collegeproject.Room.DataBaseImageProvider;
+import com.example.collegeproject.Room.ImageBitmapString;
+import com.example.collegeproject.Room.ImagesData;
 import com.tuyenmonkey.mkloader.MKLoader;
 
 import java.io.File;
@@ -57,9 +61,13 @@ public class ImageAddActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     public static final String mypreference = "mypref";
     public static final String USER_ID = "user_id";
+    public static final String LOGGED_IN = "log_in";
     private static final int STORAGE_PERMISSION_CODE = 123;
-    public static final String USER_PDF_FILE = "user_resume_pdf";
+    public static final String USER_PDF_FILE = "resume_check";
     private long pressedTime;
+    public Bitmap offline_image_store_image_add;
+    Uri uri;
+    String next_resume_main;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -93,14 +101,17 @@ public class ImageAddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent_next_activity;
+                saveImageInRoom();
+//                Toast.makeText(ImageAddActivity.this, "" + user_resume_check, Toast.LENGTH_SHORT).show();
                 if (user_resume_check.equals("")) {
                     intent_next_activity = new Intent(ImageAddActivity.this, UploadResume.class);
                     startActivity(intent_next_activity);
+                    next_resume_main = "upload_resume";
                 } else {
-                    if (verify_id.equals("1")) {
-                        intent_next_activity = new Intent(ImageAddActivity.this, MasterActivity.class);
-                        startActivity(intent_next_activity);
-                    }/* else {
+                    intent_next_activity = new Intent(ImageAddActivity.this, MasterActivity.class);
+                    startActivity(intent_next_activity);
+                    next_resume_main = "logged_in";
+                    /* else {
                         intent_next_activity = new Intent(ImageAddActivity.this, Verification.class);
                     }*/
                 }
@@ -131,7 +142,8 @@ public class ImageAddActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 50) {
             try {
-                Uri uri = data.getData();
+                uri = data.getData();
+                offline_image_store_image_add = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                 uridata = uri.toString();
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null);
@@ -147,7 +159,7 @@ public class ImageAddActivity extends AppCompatActivity {
         }
         if (requestCode == 2296) {
             if (Environment.isExternalStorageManager()) {
-                // perform action when allow permission success
+
             } else {
                 Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
             }
@@ -158,6 +170,14 @@ public class ImageAddActivity extends AppCompatActivity {
         toolbar_upload_image.setBackground(new ColorDrawable(ContextCompat.getColor(this, R.color.main_color)));
         toolbar_upload_image.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
         toolbar_upload_image.setTitle("Upload Image");
+    }
+
+    public void saveImageInRoom() {
+        ImagesData imagesData = new ImagesData();
+        imagesData.setImages(ImageBitmapString.getStringFromBitmap(offline_image_store_image_add));
+//        Toast.makeText(loginActivity, "" + offline_image_store, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(loginActivity, "" + ImageBitmapString.getStringFromBitmap(offline_image_store), Toast.LENGTH_SHORT).show();
+        DataBaseImageProvider.getDbConnection(getApplicationContext()).userImageDao().insert_image(imagesData);
     }
 
     private void uploadFile() {
@@ -358,6 +378,9 @@ public class ImageAddActivity extends AppCompatActivity {
         temp_user_id = sharedPreferences.getString(USER_ID, "");
         user_resume_check = sharedPreferences.getString(USER_PDF_FILE, "");
         verify_id = sharedPreferences.getString("verify", "");
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(LOGGED_IN, next_resume_main);
+        editor.commit();
     }
 
     @Override

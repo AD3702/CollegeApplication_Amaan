@@ -26,7 +26,7 @@
                 android:src="@drawable/main_logo" />
 
             <TextView
-                android:id="@+id/main_login_text"
+                android:id="@+id/main_otp_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

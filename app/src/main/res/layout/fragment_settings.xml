@@ -14,6 +14,7 @@
         android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/linear_layout_settings_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="80dp"
@@ -61,11 +62,11 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensansmedium"
                             android:padding="10dp"
                             android:text="Name"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -74,11 +75,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginBottom="5dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="10dp"
                             android:text="Education"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp" />
+                            android:textSize="12dp" />
 
                     </LinearLayout>
 
@@ -107,8 +108,7 @@
                         android:id="@+id/edit_profile_settings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="42dp"
@@ -124,11 +124,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="5dp"
                             android:text="Edit Card"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -136,8 +136,7 @@
                         android:id="@+id/security_settings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="42dp"
@@ -153,11 +152,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="5dp"
                             android:text="Security"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -165,8 +164,7 @@
                         android:id="@+id/settings_contact_us"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="42dp"
@@ -182,11 +180,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="5dp"
                             android:text="Contact Us"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -194,8 +192,7 @@
                         android:id="@+id/settings_follow_us"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="42dp"
@@ -211,19 +208,19 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="5dp"
                             android:text="Follow Us"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/linear_layout_about_us"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="42dp"
@@ -239,11 +236,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="5dp"
                             android:text="About Us"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -251,8 +248,7 @@
                         android:id="@+id/settings_share"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="42dp"
@@ -268,11 +264,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="5dp"
                             android:text="Share"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -280,8 +276,7 @@
                         android:id="@+id/privacy_policy_settings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="42dp"
@@ -297,11 +292,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="5dp"
                             android:text="@string/privacy_policy"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -309,8 +304,7 @@
                         android:id="@+id/feedback_settings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="42dp"
@@ -326,11 +320,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="5dp"
                             android:text="Feedback"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -338,8 +332,7 @@
                         android:id="@+id/logout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="42dp"
@@ -355,11 +348,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="5dp"
                             android:text="Logout"
                             android:textColor="@color/main_color"
-                            android:textSize="18dp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -369,10 +362,29 @@
     </ScrollView>
 
     <com.tuyenmonkey.mkloader.MKLoader
+        android:id="@+id/setting_image_spinner"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:layout_anchor="@id/setting_profile_image"
+        app:layout_anchorGravity="center"
+        app:mk_color="@color/main_color"
+        app:mk_type="ClassicSpinner" />
+
+    <com.tuyenmonkey.mkloader.MKLoader
         android:id="@+id/settings_loader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:visibility="invisible"
+        app:layout_anchor="@id/linear_layout_about_us"
+        app:layout_anchorGravity="center"
         app:mk_color="@color/main_color"
-        app:mk_type="TwinFishesSpinner" />
+        app:mk_type="ClassicSpinner" />
+
+    <ImageView
+        android:id="@+id/aplha_settings_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.8"
+        android:src="@drawable/main_bg_for_settings" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

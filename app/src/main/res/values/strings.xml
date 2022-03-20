@@ -30,4 +30,5 @@
     <string name="generate_otp">Generate OTP</string>
     <string name="received_message">Received Message</string>
     <string name="verify_otp">Verify OTP</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

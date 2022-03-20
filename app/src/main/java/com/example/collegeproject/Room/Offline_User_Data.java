@@ -1,4 +1,4 @@
-package com.example.collegeproject.Activity;
+package com.example.collegeproject.Room;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -10,7 +10,8 @@ import java.io.Serializable;
 
 public class Offline_User_Data implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "user_id")
     private int user_id;
 
     @ColumnInfo(name = "user_name")
@@ -19,52 +20,52 @@ public class Offline_User_Data implements Serializable {
     @ColumnInfo(name = "user_email")
     private String user_email;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_contact")
     private String user_contact;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_address")
     private String user_address;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_area")
     private String user_area;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_location")
     private String user_location;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_english_speaking")
     private String user_english_speaking;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_date_of_birth")
     private String user_date_of_birth;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_password")
     private String user_password;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_college_name")
     private String user_college_name;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_semester")
     private String user_semester;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_college_degree")
     private String user_college_degree;
 
-    @ColumnInfo(name = "user_email")
-    private String user_card_type;
+    @ColumnInfo(name = "user_card_type")
+    private int user_card_type;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_profile_image")
     private String user_profile_image;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_resume_pdf")
     private String user_resume_pdf;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_college_id_card")
     private String user_college_id_card;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_view_job_type")
     private String user_view_job_type;
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_verification_id")
     private String user_verification_id;
 
     public int getUser_id() {
@@ -171,11 +172,11 @@ public class Offline_User_Data implements Serializable {
         this.user_college_degree = user_college_degree;
     }
 
-    public String getUser_card_type() {
+    public int getUser_card_type() {
         return user_card_type;
     }
 
-    public void setUser_card_type(String user_card_type) {
+    public void setUser_card_type(int user_card_type) {
         this.user_card_type = user_card_type;
     }
 

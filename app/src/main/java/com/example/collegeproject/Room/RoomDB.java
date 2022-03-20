@@ -1,4 +1,4 @@
-package com.example.collegeproject.Activity;
+package com.example.collegeproject.Room;
 
 import android.content.Context;
 
@@ -12,18 +12,17 @@ public abstract class RoomDB extends RoomDatabase {
 
     private static RoomDB roomDB;
 
-    private static String DATABSE_NAME = "user_database";
+    private static String DATABASE_NAME = "user_database";
 
     public synchronized static RoomDB getInstance(Context context) {
         if (roomDB == null) {
-            roomDB = Room.databaseBuilder(context.getApplicationContext(), RoomDB.class, DATABSE_NAME)
+            roomDB = Room.databaseBuilder(context.getApplicationContext(), RoomDB.class, DATABASE_NAME)
                     .allowMainThreadQueries()
-                    .fallbackToDestructiveMigration()
                     .build();
         }
         return roomDB;
     }
 
-    public abstract 
+    public abstract UserDao userDao();
 
 }

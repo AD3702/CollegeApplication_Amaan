@@ -15,6 +15,9 @@ public class Jobdatum {
     @SerializedName("company_email")
     @Expose
     private String companyEmail;
+    @SerializedName("company_contact_number")
+    @Expose
+    private String companyContactNumber;
     @SerializedName("company_founding_date")
     @Expose
     private String companyFoundingDate;
@@ -33,9 +36,24 @@ public class Jobdatum {
     @SerializedName("company_website")
     @Expose
     private String companyWebsite;
+    @SerializedName("company_logo")
+    @Expose
+    private String companyLogo;
+    @SerializedName("company_lat")
+    @Expose
+    private String companyLat;
+    @SerializedName("company_long")
+    @Expose
+    private String companyLong;
     @SerializedName("job_id")
     @Expose
     private String jobId;
+    @SerializedName("job_add_date")
+    @Expose
+    private String jobAddDate;
+    @SerializedName("company_job_id")
+    @Expose
+    private String companyJobId;
     @SerializedName("job_post")
     @Expose
     private String jobPost;
@@ -54,15 +72,27 @@ public class Jobdatum {
     @SerializedName("job_description")
     @Expose
     private String jobDescription;
+    @SerializedName("job_type")
+    @Expose
+    private String jobType;
     @SerializedName("job_timings")
     @Expose
     private String jobTimings;
     @SerializedName("job_working_days")
     @Expose
     private String jobWorkingDays;
-    @SerializedName("company_contact_number")
+    @SerializedName("job_vaccancy_id")
     @Expose
-    private String company_contact_number;
+    private String jobVaccancyId;
+    @SerializedName("total_applications_for_job")
+    @Expose
+    private String totalApplicationsForJob;
+    @SerializedName("total_job_accepted")
+    @Expose
+    private String totalJobAccepted;
+    @SerializedName("total_job_rejected")
+    @Expose
+    private String totalJobRejected;
 
     public String getCompanyId() {
         return companyId;
@@ -86,6 +116,14 @@ public class Jobdatum {
 
     public void setCompanyEmail(String companyEmail) {
         this.companyEmail = companyEmail;
+    }
+
+    public String getCompanyContactNumber() {
+        return companyContactNumber;
+    }
+
+    public void setCompanyContactNumber(String companyContactNumber) {
+        this.companyContactNumber = companyContactNumber;
     }
 
     public String getCompanyFoundingDate() {
@@ -136,12 +174,52 @@ public class Jobdatum {
         this.companyWebsite = companyWebsite;
     }
 
+    public String getCompanyLogo() {
+        return companyLogo;
+    }
+
+    public void setCompanyLogo(String companyLogo) {
+        this.companyLogo = companyLogo;
+    }
+
+    public String getCompanyLat() {
+        return companyLat;
+    }
+
+    public void setCompanyLat(String companyLat) {
+        this.companyLat = companyLat;
+    }
+
+    public String getCompanyLong() {
+        return companyLong;
+    }
+
+    public void setCompanyLong(String companyLong) {
+        this.companyLong = companyLong;
+    }
+
     public String getJobId() {
         return jobId;
     }
 
     public void setJobId(String jobId) {
         this.jobId = jobId;
+    }
+
+    public String getJobAddDate() {
+        return jobAddDate;
+    }
+
+    public void setJobAddDate(String jobAddDate) {
+        this.jobAddDate = jobAddDate;
+    }
+
+    public String getCompanyJobId() {
+        return companyJobId;
+    }
+
+    public void setCompanyJobId(String companyJobId) {
+        this.companyJobId = companyJobId;
     }
 
     public String getJobPost() {
@@ -192,6 +270,14 @@ public class Jobdatum {
         this.jobDescription = jobDescription;
     }
 
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
     public String getJobTimings() {
         return jobTimings;
     }
@@ -208,11 +294,35 @@ public class Jobdatum {
         this.jobWorkingDays = jobWorkingDays;
     }
 
-    public String getCompany_contact_number() {
-        return company_contact_number;
+    public String getJobVaccancyId() {
+        return jobVaccancyId;
     }
 
-    public void setCompany_contact_number(String company_contact_number) {
-        this.company_contact_number = company_contact_number;
+    public void setJobVaccancyId(String jobVaccancyId) {
+        this.jobVaccancyId = jobVaccancyId;
+    }
+
+    public String getTotalApplicationsForJob() {
+        return totalApplicationsForJob;
+    }
+
+    public void setTotalApplicationsForJob(String totalApplicationsForJob) {
+        this.totalApplicationsForJob = totalApplicationsForJob;
+    }
+
+    public String getTotalJobAccepted() {
+        return totalJobAccepted;
+    }
+
+    public void setTotalJobAccepted(String totalJobAccepted) {
+        this.totalJobAccepted = totalJobAccepted;
+    }
+
+    public String getTotalJobRejected() {
+        return totalJobRejected;
+    }
+
+    public void setTotalJobRejected(String totalJobRejected) {
+        this.totalJobRejected = totalJobRejected;
     }
 }

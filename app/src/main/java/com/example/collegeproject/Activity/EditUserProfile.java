@@ -1,12 +1,18 @@
 package com.example.collegeproject.Activity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,11 +20,18 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -27,19 +40,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import com.example.collegeproject.Adapter.DownLoadImageTask;
 import com.example.collegeproject.Database.APIInterface;
 import com.example.collegeproject.Database.AppClient;
 import com.example.collegeproject.Database.Registrationdatum;
 import com.example.collegeproject.Database.ServerResponse;
 import com.example.collegeproject.Database.UserData;
 import com.example.collegeproject.R;
+import com.example.collegeproject.Room.DBHelper;
+import com.example.collegeproject.Room.DataBaseImageProvider;
+import com.example.collegeproject.Room.ImagesData;
+import com.example.collegeproject.Room.Offline_User_Data;
+import com.example.collegeproject.Room.RoomDB;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tuyenmonkey.mkloader.MKLoader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -56,6 +78,7 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
     Toolbar toolbar;
     Button edit_profile_main_btn, save_btn;
     MKLoader edit_loader;
+    List<String> semester = new ArrayList<>();
     private int mYear, mMonth, mDay;
     DatePickerDialog datePickerDialog;
     LinearLayout edit_prof_date_of_birth_linear;
@@ -63,7 +86,7 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
     SharedPreferences sharedPreferences;
     public static final String mypreference = "mypref";
     public static final String USER_ID = "user_id";
-    ArrayList<Registrationdatum> editprofdatalist;
+    ArrayList<Registrationdatum> editprofdatalist_online;
     String edit_education;
     int user_id_edit;
     CircleImageView edit_profile_image;
@@ -71,7 +94,18 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
     int temp_check_bitmap = 0;
     File file;
     String edit_name, edit_user_image_profile, edit_education_1, edit_education_2, edit_english_speak, edit_address, edit_area, edit_location, edit_date_of_birth, edit_contact, edit_email;
-    EditText edit_profile_name, edit_profile_education, edit_profile_english, edit_profile_address, edit_profile_area, edit_profile_location, edit_profile_date_of_birth, edit_profile_contact, edit_profile_email;
+    EditText edit_profile_name, edit_profile_degree, edit_profile_english, edit_profile_address, edit_profile_area, edit_profile_location, edit_profile_date_of_birth, edit_profile_contact, edit_profile_email;
+    RoomDB roomDB_edit_user;
+    TextView edit_profile_semester;
+    List<Offline_User_Data> editprofdatalist;
+    DataBaseImageProvider dataBaseImageProvider;
+    List<ImagesData> imagesDataList;
+    DBHelper dbHelper;
+    private byte[] accImage;
+    MKLoader edit_loader_image;
+    boolean setImage_Icon = false;
+    Uri uri_image_edit_user_prof;
+    LinearLayout user_education_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,21 +113,39 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_edit_user_profile);
         initializeUI();
         toolbar_setup();
-        Intent sharedprefIntent = getIntent();
+        dbHelper = new DBHelper(this);
+        Intent image_intent_get_user_profile_image = getIntent();
+        uri_image_edit_user_prof = image_intent_get_user_profile_image.getData();
         sharedPref();
-        loadData_edit();
+        edituser_profile_offline();
         edit_profile_main_btn.setOnClickListener(this);
         save_btn.setOnClickListener(this);
-        edit_prof_date_of_birth_linear.setOnClickListener(this);
         edit_profile_image.setOnClickListener(this);
+        user_education_layout = findViewById(R.id.user_education_layout);
+        /*else{
+            Intent full_screen_intent = new Intent(EditUserProfile.this,ViewFullImage.class);
+            full_screen_intent.setData(getImageUri(EditUserProfile.this,))
+        }*/
+    }
+
+    public void setclickable_edit_false() {
+        edit_prof_date_of_birth_linear.setOnClickListener(null);
+//        edit_profile_semester.setOnClickListener(null);
+        user_education_layout.setOnClickListener(null);
+    }
+
+    public void setclickable_edit() {
+        edit_prof_date_of_birth_linear.setOnClickListener(this);
+        user_education_layout.setOnClickListener(this);
     }
 
     public void initializeUI() {
         edit_loader = findViewById(R.id.edit_details_loader);
-        editprofdatalist = new ArrayList<>();
+        editprofdatalist_online = new ArrayList<>();
         toolbar = findViewById(R.id.toolbar_actionbar_edit_profile_main);
         edit_profile_name = findViewById(R.id.edit_profile_name);
-        edit_profile_education = findViewById(R.id.edit_profile_education);
+        edit_profile_degree = findViewById(R.id.edit_profile_education_degree);
+        edit_profile_semester = findViewById(R.id.edit_profile_education_semester);
         edit_profile_english = findViewById(R.id.edit_profile_english_level);
         edit_profile_address = findViewById(R.id.edit_profile_address);
         edit_profile_date_of_birth = findViewById(R.id.edit_profile_date);
@@ -101,6 +153,7 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
         edit_profile_location = findViewById(R.id.edit_profile_location);
         edit_profile_contact = findViewById(R.id.edit_profile_contact);
         edit_profile_email = findViewById(R.id.edit_profile_email);
+        edit_loader_image = findViewById(R.id.edit_user_loader_image);
         edit_profile_main_btn = findViewById(R.id.edit_profile_btn_main);
         save_btn = findViewById(R.id.edit_profile_btn_save);
         edit_prof_date_of_birth_linear = findViewById(R.id.date_of_birth_linear);
@@ -116,14 +169,18 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if (view == edit_profile_main_btn) {
+            setImage_Icon = true;
+            setclickable_edit();
             edit_profile_main_btn.setVisibility(View.INVISIBLE);
             save_btn.setVisibility(View.VISIBLE);
             enableedittextset();
         }
         if (view == save_btn) {
+            setImage_Icon = false;
             edit_profile_main_btn.setVisibility(View.VISIBLE);
             edit_loader.setVisibility(View.VISIBLE);
             getdetails_post();
+            setclickable_edit_false();
             save_btn.setVisibility(View.INVISIBLE);
             Toast.makeText(EditUserProfile.this, "" + edit_date_of_birth, Toast.LENGTH_SHORT).show();
             disableedittextset();
@@ -144,7 +201,147 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
             datePickerDialog.show();
         }
         if (view == edit_profile_image) {
-            startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 50);
+//            startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 50);
+            Dialog mDialog = new Dialog(this, R.style.Theme_With_Action_Bar);
+            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            mDialog.setContentView(R.layout.dialog_fullscreen);
+            ImageView full_screen_image = mDialog.findViewById(R.id.full_screen_image);
+            ImageButton back_profile_image_btn = mDialog.findViewById(R.id.back_profile_photo_btn);
+            FloatingActionButton save_image = mDialog.findViewById(R.id.save_image_gallery);
+            save_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bitmap bitmap;
+                    if (edit_profile_image.getDrawable() instanceof BitmapDrawable) {
+                        bitmap = ((BitmapDrawable) edit_profile_image.getDrawable()).getBitmap();
+                    } else {
+                        Drawable d = edit_profile_image.getDrawable();
+                        bitmap = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(bitmap);
+                        d.draw(canvas);
+                    }
+                    saveImage(bitmap);
+                }
+            });
+            back_profile_image_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDialog.dismiss();
+                }
+            });
+            if (uri_image_edit_user_prof == null) {
+                full_screen_image.setImageResource(R.drawable.ic_person_white);
+            } else {
+                full_screen_image.setImageURI(uri_image_edit_user_prof);
+            }
+            mDialog.show();
+        }
+        if (view == user_education_layout) {
+            android.widget.PopupMenu popupMenu = new android.widget.PopupMenu(EditUserProfile.this, user_education_layout);
+            popupMenu.getMenuInflater().inflate(R.menu.semester_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Toast.makeText(EditUserProfile.this, "" + item.getTitle(), Toast.LENGTH_SHORT).show();
+                    if (item.getItemId() == R.id.semester_1) {
+                        edit_education_2 = String.valueOf(item.getTitle());
+                        edit_profile_semester.setText(" ( " + edit_education_2 + " )");
+                    }
+                    if (item.getItemId() == R.id.semester_2) {
+                        edit_education_2 = String.valueOf(item.getTitle());
+                        edit_profile_semester.setText(" ( " + edit_education_2 + " )");
+                    }
+                    if (item.getItemId() == R.id.semester_3) {
+                        edit_education_2 = String.valueOf(item.getTitle());
+                        edit_profile_semester.setText(" ( " + edit_education_2 + " )");
+                    }
+                    if (item.getItemId() == R.id.semester_4) {
+                        edit_education_2 = String.valueOf(item.getTitle());
+                        edit_profile_semester.setText(" ( " + edit_education_2 + " )");
+                    }
+                    if (item.getItemId() == R.id.semester_5) {
+                        edit_education_2 = String.valueOf(item.getTitle());
+                        edit_profile_semester.setText(" ( " + edit_education_2 + " )");
+                    }
+                    if (item.getItemId() == R.id.semester_6) {
+                        edit_education_2 = String.valueOf(item.getTitle());
+                        edit_profile_semester.setText(" ( " + edit_education_2 + " )");
+                    }
+                    if (item.getItemId() == R.id.semester_7) {
+                        edit_education_2 = String.valueOf(item.getTitle());
+                        edit_profile_semester.setText(" ( " + edit_education_2 + " )");
+                    }
+                    if (item.getItemId() == R.id.semester_8) {
+                        edit_education_2 = String.valueOf(item.getTitle());
+                        edit_profile_semester.setText(" ( " + edit_education_2 + " )");
+                    }
+                    if (item.getItemId() == R.id.semester_passed_out) {
+                        edit_profile_semester.setText("");
+                    }
+                    return true;
+                }
+            });
+            popupMenu.show();
+        }
+    }
+
+    private void saveImage(Bitmap bitmap) {
+        if (android.os.Build.VERSION.SDK_INT >= 29) {
+            ContentValues values = contentValues();
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/" + getString(R.string.app_name));
+            values.put(MediaStore.Images.Media.IS_PENDING, true);
+
+            Uri uri = this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            if (uri != null) {
+                try {
+                    saveImageToStream(bitmap, EditUserProfile.this.getContentResolver().openOutputStream(uri));
+                    values.put(MediaStore.Images.Media.IS_PENDING, false);
+                    this.getContentResolver().update(uri, values, null, null);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        } else {
+            File directory = new File(Environment.getExternalStorageDirectory().toString() + '/' + getString(R.string.app_name));
+
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            String fileName = System.currentTimeMillis() + ".png";
+            File file = new File(directory, fileName);
+            try {
+                saveImageToStream(bitmap, new FileOutputStream(file));
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+                this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private ContentValues contentValues() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        }
+        return values;
+    }
+
+    private void saveImageToStream(Bitmap bitmap, OutputStream outputStream) {
+        if (outputStream != null) {
+            try {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                outputStream.close();
+                Toast.makeText(EditUserProfile.this, "Image Saved", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -161,7 +358,6 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
 
     public void disableedittextset() {
         edit_profile_name.setEnabled(false);
-        edit_profile_education.setEnabled(false);
         edit_profile_english.setEnabled(false);
         edit_profile_address.setEnabled(false);
         edit_profile_contact.setEnabled(false);
@@ -171,7 +367,7 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
         temp_check_bitmap = 0;
     }
 
-    public void loadData_edit() {
+    /*public void loadData_edit() {
         APIInterface apiInterface = AppClient.getclient().create(APIInterface.class);
         Call<UserData> registrationCall = apiInterface.find_user_id(get_user_id);
         registrationCall.enqueue(new Callback<UserData>() {
@@ -200,7 +396,7 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
 
             }
         });
-    }
+    }*/
 
     public void sharedPref() {
         sharedPreferences = getSharedPreferences(mypreference, MODE_PRIVATE);
@@ -210,17 +406,60 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
 
     public void setdetails_pre() {
         edit_profile_name.setText(edit_name);
-        edit_education = edit_education_1 + " ( " + edit_education_2 + " )";
-        edit_profile_education.setText(edit_education);
+        edit_profile_degree.setText(edit_education_1);
+        if (edit_education_2.equals("Passed Out")) {
+            edit_profile_semester.setText("");
+        } else {
+            edit_profile_semester.setText(" ( " + edit_education_2 + " )");
+        }
         edit_profile_english.setText(edit_english_speak);
         edit_profile_address.setText(edit_address);
         edit_profile_contact.setText(edit_contact);
         edit_profile_email.setText(edit_email);
         edit_profile_area.setText(edit_area);
         edit_profile_location.setText(edit_location);
-        new DownLoadImageTask(edit_profile_image, edit_loader).execute(edit_user_image_profile);
+        edit_profile_date_of_birth.setText(edit_date_of_birth);
+//        Toast.makeText(EditUserProfile.this, "" + uri_image_edit_user_prof, Toast.LENGTH_SHORT).show();
+        edit_profile_image.setImageURI(uri_image_edit_user_prof);
+        edit_loader_image.setVisibility(View.INVISIBLE);
+//        new DownLoadImageTask(edit_profile_image, edit_loader_image).execute(edit_user_image_profile);
+        Log.e("TAG", edit_user_image_profile);
         edit_loader.setVisibility(View.INVISIBLE);
+        /*dataBaseImageProvider = DataBaseImageProvider.getDbConnection(EditUserProfile.this.getApplicationContext());
+        imagesDataList = dataBaseImageProvider.userImageDao().getAllImage();*/
+        //ImagesData imagesData = imagesDataList.get(0);
+        /*Bitmap set_image = ImageBitmapString.getBitmapFromStr(imagesData.getImages());
+        Toast.makeText(EditUserProfile.this, "" + imagesData.getImages(), Toast.LENGTH_SHORT).show();
+        */
+//        edit_profile_image.setImageBitmap(bitmapImage);
+//        loadImageFromDB();
     }
+
+    /*void loadImageFromDB() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    dbHelper.open();
+                    final byte[] retreiveImageFromDB_byte = dbHelper.retreiveImageFromDB();
+                    if (retreiveImageFromDB_byte == null) {
+                        Toast.makeText(EditUserProfile.this, "null", Toast.LENGTH_SHORT).show();
+                    }
+                    dbHelper.close();
+                    // Show Image from DB in ImageView
+                    edit_profile_image.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            edit_profile_image.setImageBitmap(Utils.getImage(retreiveImageFromDB_byte));
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("TAG", "<loadImageFromDB> Error : " + e.getLocalizedMessage());
+                    dbHelper.close();
+                }
+            }
+        }).start();
+    }*/
 
     public void getdetails_post() {
         edit_date_of_birth = edit_profile_date_of_birth.getText().toString();
@@ -243,7 +482,8 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
         edit_profile_email.setText(edit_email);
         edit_profile_area.setText(edit_area);
         edit_profile_location.setText(edit_location);
-        new DownLoadImageTask(edit_profile_image, edit_loader).execute(edit_user_image_profile);
+        edit_profile_english.setText(edit_english_speak);
+//        new DownLoadImageTask(edit_profile_image, edit_loader).execute(edit_user_image_profile);
     }
 
     public void setData_edit() {
@@ -253,11 +493,25 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onResponse(Call<UserData> call, Response<UserData> response) {
                 try {
-                    editprofdatalist = (ArrayList<Registrationdatum>) response.body().getRegistrationdata();
+                    Offline_User_Data offline_user_data = editprofdatalist.get(0);
+                    offline_user_data.setUser_name(edit_name);
+                    offline_user_data.setUser_email(edit_email);
+                    offline_user_data.setUser_contact(edit_contact);
+                    offline_user_data.setUser_address(edit_address);
+                    offline_user_data.setUser_area(edit_area);
+                    offline_user_data.setUser_location(edit_location);
+                    offline_user_data.setUser_english_speaking(edit_english_speak);
+                    offline_user_data.setUser_date_of_birth(edit_date_of_birth);
+                    offline_user_data.setUser_profile_image(edit_user_image_profile);
+                    roomDB_edit_user.userDao().update_edit_prof(offline_user_data);
+                    /*roomDB_edit_user.userDao().delete(offline_user_data);
+                    roomDB_edit_user.userDao().insert_user_data(offline_user_data);*/
+                    Toast.makeText(EditUserProfile.this, "" + editprofdatalist.get(0).getUser_address(), Toast.LENGTH_SHORT).show();
                     setdetails_post();
 
                 } catch (Exception e) {
 
+                    Log.e("ERROR", String.valueOf(e));
                 }
                 edit_loader.setVisibility(View.INVISIBLE);
             }
@@ -310,7 +564,24 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
                     ServerResponse server = response.body();
                     try {
                         if (server.isSuccess()) {
-                            edit_loader.setVisibility(View.INVISIBLE);
+                            APIInterface apiInterface = AppClient.getclient().create(APIInterface.class);
+                            Call<UserData> userDataCall = apiInterface.find_user_id(get_user_id);
+                            userDataCall.enqueue(new Callback<UserData>() {
+                                @Override
+                                public void onResponse(Call<UserData> call, Response<UserData> response) {
+                                    ArrayList<Registrationdatum> registrationdatumArrayList = (ArrayList<Registrationdatum>) response.body().getRegistrationdata();
+                                    edit_loader.setVisibility(View.INVISIBLE);
+                                    edit_user_image_profile = registrationdatumArrayList.get(0).getUserProfileImage();
+                                    Offline_User_Data offline_user_data = editprofdatalist.get(0);
+                                    offline_user_data.setUser_profile_image(edit_user_image_profile);
+                                    roomDB_edit_user.userDao().update_edit_prof(offline_user_data);
+                                }
+
+                                @Override
+                                public void onFailure(Call<UserData> call, Throwable t) {
+
+                                }
+                            });
                         } else {
                             Log.d("Respon", server.toString());
                         }
@@ -442,4 +713,35 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
+
+    public void edituser_profile_offline() {
+        try {
+            roomDB_edit_user = RoomDB.getInstance(this.getApplicationContext());
+            editprofdatalist = roomDB_edit_user.userDao().getlistData();
+            edit_name = editprofdatalist.get(0).getUser_name();
+            edit_education_1 = editprofdatalist.get(0).getUser_college_degree();
+            edit_education_2 = editprofdatalist.get(0).getUser_semester();
+            edit_english_speak = editprofdatalist.get(0).getUser_english_speaking();
+            edit_address = editprofdatalist.get(0).getUser_address();
+            edit_area = editprofdatalist.get(0).getUser_area();
+            edit_location = editprofdatalist.get(0).getUser_location();
+            edit_contact = editprofdatalist.get(0).getUser_contact();
+            edit_email = editprofdatalist.get(0).getUser_email();
+            edit_date_of_birth = editprofdatalist.get(0).getUser_date_of_birth();
+            edit_user_image_profile = editprofdatalist.get(0).getUser_profile_image();
+            setdetails_pre();
+
+        } catch (Exception e) {
+            Log.e("OFFLINE ERROR", String.valueOf(e));
+        }
+    }
+
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        startActivity(new Intent(EditUserProfile.this, MasterActivity.class));
+//        MasterActivity.masteractivity.finish();
+//        finish();
+//        MasterActivity.masteractivity.oneditprofbackpressed();
+//    }
 }

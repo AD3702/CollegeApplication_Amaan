@@ -20,6 +20,13 @@ public interface APIInterface {
     );
 
     @FormUrlEncoded
+    @POST("jobs/upload_image_when_null.php")
+    Call<UserData> upload_image_when_empty(
+            @Field("user_id") String user_id,
+            @Field("user_profile_image") String user_profile_image
+    );
+
+    @FormUrlEncoded
     @POST("jobs/update_profile.php")
     Call<UserData> update_profile(
             @Field("user_name") String name,

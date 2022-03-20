@@ -1,10 +1,12 @@
 package com.example.collegeproject.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,10 +39,13 @@ public class CompanyCard extends AppCompatActivity implements View.OnClickListen
     SharedPreferences sharedPreferences;
     public static final String mypreference = "mypref";
     public static final String USER_ID = "user_id";
+    public static final String LATITUDE = "lat";
+    public static final String LONGITUDE = "long";
     ArrayList<Jobdatum> jobdatumArrayList;
     String check_apply;
+    LinearLayout company_location_company_card;
     TextView company_name, job_post, salary, minimum_education, english_level, job_experience, job_description, job_timings, job_working_days, company_address, company_contact_number, company_email, company_website;
-    String company_name_string, job_post_string, user_id, salary_string, minimum_education_string, english_level_string, job_experience_string, job_description_string, job_timings_string, job_working_days_string, company_address_string, company_contact_number_string, company_email_string, company_website_string, com_id_string, job_id_string;
+    String company_name_string, job_post_string, user_id, salary_string, minimum_education_string, english_level_string, job_experience_string, job_description_string, job_timings_string, job_working_days_string, company_address_string, company_contact_number_string, company_email_string, company_website_string, com_id_string, job_id_string, company_latitude, company_longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,7 @@ public class CompanyCard extends AppCompatActivity implements View.OnClickListen
         load_data();
         main_apply_for_btn.setOnClickListener(this);
         main_applied_for_btn.setOnClickListener(this);
+        company_location_company_card.setOnClickListener(this);
     }
 
 
@@ -81,6 +87,7 @@ public class CompanyCard extends AppCompatActivity implements View.OnClickListen
         company_contact_number = findViewById(R.id.company_contact);
         company_email = findViewById(R.id.company_email);
         company_website = findViewById(R.id.company_website);
+        company_location_company_card = findViewById(R.id.company_location_company_card);
     }
 
     public void set_details() {
@@ -118,8 +125,15 @@ public class CompanyCard extends AppCompatActivity implements View.OnClickListen
                     job_working_days_string = jobdatumArrayList.get(0).getJobWorkingDays();
                     company_address_string = jobdatumArrayList.get(0).getCompanyAddress();
                     company_email_string = jobdatumArrayList.get(0).getCompanyEmail();
-                    company_contact_number_string = jobdatumArrayList.get(0).getCompany_contact_number();
+                    company_contact_number_string = jobdatumArrayList.get(0).getCompanyContactNumber();
                     company_website_string = jobdatumArrayList.get(0).getCompanyWebsite();
+                    company_latitude = jobdatumArrayList.get(0).getCompanyLat();
+                    company_longitude = jobdatumArrayList.get(0).getCompanyLong();
+                    sharedPreferences = getSharedPreferences(mypreference, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(LATITUDE, company_latitude);
+                    editor.putString(LONGITUDE, company_longitude);
+                    editor.commit();
                     set_details();
                     company_card_loader.setVisibility(View.INVISIBLE);
                 } catch (Exception e) {
@@ -198,6 +212,9 @@ public class CompanyCard extends AppCompatActivity implements View.OnClickListen
         }
         if (view == main_applied_for_btn) {
             displayErrorAlertDialog();
+        }
+        if (view == company_location_company_card) {
+            startActivity(new Intent(CompanyCard.this, MapsActivity.class));
         }
     }
 

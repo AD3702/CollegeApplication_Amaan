@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -103,6 +104,12 @@ public class Company_Info_Card_Apply_For_Adapter extends RecyclerView.Adapter<Co
                 context.startActivity(intent);
             }
         });
+        holder.linearLayout_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     public void getonclickdata(int position) {
@@ -121,6 +128,7 @@ public class Company_Info_Card_Apply_For_Adapter extends RecyclerView.Adapter<Co
         public CardView company_info_apply_for_card_mainview;
         ImageView company_logo;
         public MKLoader mkLoader_applyfor;
+        public LinearLayout linearLayout_location;
         public TextView card_company_name, card_job_post, card_job_salary, card_contact_number, card_job_location;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -135,6 +143,7 @@ public class Company_Info_Card_Apply_For_Adapter extends RecyclerView.Adapter<Co
             card_job_location = itemView.findViewById(R.id.card_job_location);
             company_logo = itemView.findViewById(R.id.company_logo_image_1);
             mkLoader_applyfor = itemView.findViewById(R.id.image_loader_apply);
+            linearLayout_location = itemView.findViewById(R.id.location_apply_for_layout);
             mkLoader_applyfor.setVisibility(View.VISIBLE);
 
         }

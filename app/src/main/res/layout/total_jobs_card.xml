@@ -65,10 +65,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:fontFamily="@font/fredoka_one_regular"
+                        android:fontFamily="@font/opensansmedium"
                         android:text="Company Name"
                         android:textColor="@color/main_color"
-                        android:textSize="18dp"
+                        android:textSize="15dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -76,10 +76,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:fontFamily="@font/comicneue_regular"
+                        android:fontFamily="@font/opensanslight"
                         android:text="Job Post"
                         android:textColor="@color/main_color"
-                        android:textSize="16dp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -106,10 +106,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="2dp"
-                                android:fontFamily="@font/comicneue_regular"
+                                android:fontFamily="@font/opensanslight"
                                 android:text="₹"
                                 android:textColor="@color/main_color"
-                                android:textSize="15dp"
+                                android:textSize="12sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -117,10 +117,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="2dp"
-                                android:fontFamily="@font/comicneue_regular"
+                                android:fontFamily="@font/opensanslight"
                                 android:text="50000"
                                 android:textColor="@color/main_color"
-                                android:textSize="15dp"
+                                android:textSize="12sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -147,7 +147,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:text="Contact Number 1"
                             android:textColor="@color/main_color"
                             android:textSize="12dp"
@@ -183,7 +183,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_margin="2dp"
-                                android:fontFamily="@font/comicneue_regular"
+                                android:fontFamily="@font/opensanslight"
                                 android:text="Location"
                                 android:textColor="@color/main_color"
                                 android:textSize="12dp"
@@ -198,12 +198,12 @@
                             android:layout_gravity="center"
                             android:layout_weight="3"
                             android:background="@drawable/approved_bg"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:gravity="center"
                             android:padding="2dp"
                             android:text="Approved"
                             android:textColor="@color/black"
-                            android:textSize="12dp"
+                            android:textSize="8dp"
                             android:textStyle="bold"
                             android:visibility="visible" />
                     </LinearLayout>

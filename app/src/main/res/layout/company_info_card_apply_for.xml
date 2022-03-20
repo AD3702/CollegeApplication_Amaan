@@ -33,7 +33,7 @@
                     android:layout_height="75dp"
                     android:layout_gravity="top|center"
                     android:layout_margin="10dp"
-                    android:background="@color/transparent"
+                    android:background="@android:transparent"
                     android:src="@drawable/main_logo" />
 
                 <com.tuyenmonkey.mkloader.MKLoader
@@ -65,10 +65,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:fontFamily="@font/fredoka_one_regular"
+                        android:fontFamily="@font/opensansmedium"
                         android:text="Company Name"
                         android:textColor="@color/main_color"
-                        android:textSize="18dp"
+                        android:textSize="15dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -76,10 +76,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:fontFamily="@font/comicneue_regular"
+                        android:fontFamily="@font/opensanslight"
                         android:text="Job Post"
                         android:textColor="@color/main_color"
-                        android:textSize="16dp"
+                        android:textSize="12dp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -106,10 +106,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="2dp"
-                                android:fontFamily="@font/comicneue_regular"
+                                android:fontFamily="@font/opensanslight"
                                 android:text="₹"
                                 android:textColor="@color/main_color"
-                                android:textSize="15dp"
+                                android:textSize="12dp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -117,10 +117,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="2dp"
-                                android:fontFamily="@font/comicneue_regular"
+                                android:fontFamily="@font/opensanslight"
                                 android:text="50000"
                                 android:textColor="@color/main_color"
-                                android:textSize="15dp"
+                                android:textSize="12dp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -147,7 +147,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="2dp"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:text="Contact Number 1"
                             android:textColor="@color/main_color"
                             android:textSize="12dp"
@@ -162,6 +162,7 @@
                         android:weightSum="4">
 
                         <LinearLayout
+                            android:id="@+id/location_apply_for_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -183,7 +184,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_margin="2dp"
-                                android:fontFamily="@font/comicneue_regular"
+                                android:fontFamily="@font/opensanslight"
                                 android:text="Location"
                                 android:textColor="@color/main_color"
                                 android:textSize="12dp"
@@ -198,10 +199,10 @@
                             android:layout_weight="3"
                             android:background="@drawable/button_bg"
                             android:backgroundTint="@color/white"
-                            android:fontFamily="@font/comicneue_regular"
+                            android:fontFamily="@font/opensanslight"
                             android:padding="2dp"
                             android:text="Apply"
-                            android:textSize="10dp"
+                            android:textSize="8dp"
                             android:theme="@style/ButtonLogin_SignUp2" />
 
                     </LinearLayout>
@@ -223,7 +224,7 @@
         android:backgroundTint="@color/white"
         android:padding="2dp"
         android:text="Applied"
-        android:textSize="10dp"
+        android:textSize="8dp"
         android:theme="@style/ButtonLogin_SignUp2"
         app:layout_anchor="@id/infocard_applybtn"
         app:layout_anchorGravity="center" />

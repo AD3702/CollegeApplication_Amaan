@@ -2,10 +2,13 @@ package com.example.collegeproject.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +23,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.tuyenmonkey.mkloader.MKLoader;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -36,13 +41,15 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
     MKLoader mkLoader_forgot;
     Button submit_email_forgot, submit_otp_forgot;
     OtpTextView otpView_forgot;
-    LinearLayout linearLayout_otp;
+    LinearLayout linearLayout_otp, resend_otp_layout;
     Random random_forgot;
     int random_num;
     String user_id_forgot;
     String random_forgot_otp;
     ArrayList<Registrationdatum> arrayList;
     private boolean confirmation = false;
+    TextView resend_otp, resend_otp_timer;
+    private static int OTP_TIME_OUT = 120000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,7 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
         submit_email_forgot.setOnClickListener(this);
         submit_otp_forgot.setOnClickListener(this);
         otpView_forgot.setOtpListener(this);
+        resend_otp.setOnClickListener(this);
     }
 
     public void initializeUI() {
@@ -65,6 +73,9 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
         otpView_forgot = findViewById(R.id.forgot_password_otp);
         linearLayout_otp = findViewById(R.id.linear_otp_layout);
         linearLayout_otp.setVisibility(View.INVISIBLE);
+        resend_otp = findViewById(R.id.resend_otp);
+        resend_otp_timer = findViewById(R.id.resend_otp_timer);
+        resend_otp_layout = findViewById(R.id.resend_otp_layout);
         confirmation = false;
     }
 
@@ -77,7 +88,26 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (v == submit_email_forgot) {
+            setTimer();
             load_from_email();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Random_number();
+                }
+            }, OTP_TIME_OUT);
+        }
+
+        if (v == resend_otp) {
+            load_from_email();
+            setTimer();
+            resend_otp.setText("Resend OTP in:");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Random_number();
+                }
+            }, OTP_TIME_OUT);
         }
 
         if (v == submit_otp_forgot) {
@@ -94,6 +124,25 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    public void setTimer() {
+        new CountDownTimer(120000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                // Used for formatting digit to be in 2 digits only
+                NumberFormat f = new DecimalFormat("00");
+                long min = (millisUntilFinished / 60000) % 60;
+                long sec = (millisUntilFinished / 1000) % 60;
+                resend_otp_timer.setText(f.format(min) + ":" + f.format(sec));
+            }
+
+            // When the task is over it will print 00:00:00 there
+            public void onFinish() {
+                resend_otp_timer.setText("");
+                resend_otp.setText("Resend OTP");
+
+            }
+        }.start();
+    }
+
     public void load_from_email() {
         mkLoader_forgot.setVisibility(View.VISIBLE);
         APIInterface apiInterface = AppClient.getclient().create(APIInterface.class);
@@ -106,7 +155,7 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
                     user_id_forgot = arrayList.get(0).getUserId();
 //                    Toast.makeText(ForgotPassword.this, "" + random_forgot_otp, Toast.LENGTH_SHORT).show();
 //                    Toast.makeText(ForgotPassword.this, "" + forgot_email.getText().toString(), Toast.LENGTH_SHORT).show();
-                    SendMailForgot sendMail = new SendMailForgot(ForgotPassword.this, forgot_email.getText().toString(), "Reset Password", "Reset password request has been sent for you account.\nIf its not you kindly ignore this email.\nTo reset password your OTP is: " + random_forgot_otp, mkLoader_forgot, linearLayout_otp);
+                    SendMailForgot sendMail = new SendMailForgot(ForgotPassword.this, forgot_email.getText().toString(), "Reset Password", "Reset password request has been sent for you account.\nIf its not you kindly ignore this email.\nTo reset password your OTP is: " + random_forgot_otp + "\nThis OTP will be valid till 2 minutes ", mkLoader_forgot, linearLayout_otp, resend_otp_layout);
                     sendMail.execute();
                     submit_email_forgot.setVisibility(View.INVISIBLE);
                 } catch (Exception e) {
