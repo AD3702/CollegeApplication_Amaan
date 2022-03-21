@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_menu"
+        android:checked="true"
+        android:color="@color/home"
+        android:icon="@drawable/ic_home_black"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/total_jobs_menu"
+        android:color="@color/logger"
+        android:icon="@drawable/ic_total_jobs"
+        android:title="Total Jobs" />
+
+    <item
+        android:id="@+id/upload_resume_menu"
+        android:color="@color/logger"
+        android:icon="@drawable/ic_total_jobs"
+        android:title="Resume" />
+
+    <item
+        android:id="@+id/settings_menu"
+        android:color="@color/logger"
+        android:icon="@drawable/ic_total_jobs"
+        android:title="Setting" />
+</menu>

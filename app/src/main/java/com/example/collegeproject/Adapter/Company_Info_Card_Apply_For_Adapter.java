@@ -32,6 +32,7 @@ import com.example.collegeproject.Database.Applicationdatum;
 import com.example.collegeproject.Fragment.Apply_For_Fragment;
 import com.example.collegeproject.Fragment.HomeFragment;
 import com.example.collegeproject.R;
+import com.squareup.picasso.Picasso;
 import com.tuyenmonkey.mkloader.MKLoader;
 
 import java.util.ArrayList;
@@ -73,7 +74,9 @@ public class Company_Info_Card_Apply_For_Adapter extends RecyclerView.Adapter<Co
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         applicationdatum = applicationdatumArrayList.get(position);
         String company_logo_string = applicationdatum.getCompanyLogo();
-        new DownloadImageTaskImageView(holder.company_logo, holder.mkLoader_applyfor).execute(company_logo_string);
+        Picasso.get().load(company_logo_string).into(holder.company_logo);
+        holder.mkLoader_applyfor.setVisibility(View.INVISIBLE);
+//        new DownloadImageTaskImageView(holder.company_logo, holder.mkLoader_applyfor).execute(company_logo_string);
         holder.apply_for.setVisibility(View.VISIBLE);
         holder.applied_infobtn.setVisibility(View.INVISIBLE);
         sharedpref();
@@ -129,7 +132,7 @@ public class Company_Info_Card_Apply_For_Adapter extends RecyclerView.Adapter<Co
         ImageView company_logo;
         public MKLoader mkLoader_applyfor;
         public LinearLayout linearLayout_location;
-        public TextView card_company_name, card_job_post, card_job_salary, card_contact_number, card_job_location;
+        public TextView card_company_name, card_job_post, card_job_salary, card_job_location;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -139,7 +142,6 @@ public class Company_Info_Card_Apply_For_Adapter extends RecyclerView.Adapter<Co
             card_company_name = itemView.findViewById(R.id.card_company_name);
             card_job_post = itemView.findViewById(R.id.card_job_post);
             card_job_salary = itemView.findViewById(R.id.card_salary);
-            card_contact_number = itemView.findViewById(R.id.card_contact_number);
             card_job_location = itemView.findViewById(R.id.card_job_location);
             company_logo = itemView.findViewById(R.id.company_logo_image_1);
             mkLoader_applyfor = itemView.findViewById(R.id.image_loader_apply);
@@ -249,7 +251,6 @@ public class Company_Info_Card_Apply_For_Adapter extends RecyclerView.Adapter<Co
         holder.card_company_name.setText(applicationdatum.getCompanyName());
         holder.card_job_post.setText(applicationdatum.getJobPost());
         holder.card_job_salary.setText(applicationdatum.getJobSalary());
-        holder.card_contact_number.setText(applicationdatum.getCompanyContactNumber());
         String area = applicationdatum.getCompanyArea();
         String location = applicationdatum.getCompanyLocation();
         String main_loc = area + ", " + location;

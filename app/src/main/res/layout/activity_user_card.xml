@@ -608,22 +608,22 @@
         app:mk_color="@color/main_color"
         app:mk_type="TwinFishesSpinner" />
 
-   <!-- <com.tuyenmonkey.mkloader.MKLoader
-        android:id="@+id/edit_details_loader_image"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        app:layout_anchor="@id/user_card_image"
-        app:layout_anchorGravity="center"
-        app:mk_color="@color/black"
-        app:mk_type="TwinFishesSpinner" />
+    <!-- <com.tuyenmonkey.mkloader.MKLoader
+         android:id="@+id/edit_details_loader_image"
+         android:layout_width="15dp"
+         android:layout_height="15dp"
+         app:layout_anchor="@id/user_card_image"
+         app:layout_anchorGravity="center"
+         app:mk_color="@color/black"
+         app:mk_type="TwinFishesSpinner" />
 
-    <com.tuyenmonkey.mkloader.MKLoader
-        android:id="@+id/edit_details_loader_image_1"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        app:layout_anchor="@id/user_card_image_1"
-        app:layout_anchorGravity="center"
-        app:mk_color="@color/black"
-        app:mk_type="TwinFishesSpinner" />-->
+     <com.tuyenmonkey.mkloader.MKLoader
+         android:id="@+id/edit_details_loader_image_1"
+         android:layout_width="15dp"
+         android:layout_height="15dp"
+         app:layout_anchor="@id/user_card_image_1"
+         app:layout_anchorGravity="center"
+         app:mk_color="@color/black"
+         app:mk_type="TwinFishesSpinner" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +48,8 @@ import retrofit2.Response;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
 
-    TextView main_register_text,register_dob;
+    TextView main_register_text, register_dob;
+    ScrollView view_register;
     ImageView header_image_register;
     Spinner register_spinner_semester, register_degree_spinner;
     public static TextInputEditText register_name, register_email, register_contact, register_address, register_area, register_location, register_password, register_college_name;
@@ -77,12 +81,14 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     public static final String REGISTER_COLLEGE_DEGREE = "register_college_degree";
     float v = 0;
     GoogleSignInClient mGoogleSignInClient;
+    SwipeListener swipeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         initializeUI();
+        swipeListener = new SwipeListener(view_register);
         SharedPreferences sharedPreferences = getSharedPreferences(mypreference, MODE_PRIVATE);
         register_Email = sharedPreferences.getString(REGISTER_EMAIL, "");
         if (register_Email.equals("")) {
@@ -137,11 +143,84 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         });
     }
 
+    private class SwipeListener implements View.OnTouchListener {
+
+        GestureDetector gestureDetector;
+
+        SwipeListener(View view) {
+            int SWIPE_DISTANCE_THRESHOLD = 250;
+            int SWIPE_VELOCITY_THRESHOLD = 250;
+
+            GestureDetector.SimpleOnGestureListener simpleOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDown(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                    boolean result = false;
+                    try {
+                        float diffY = e2.getY() - e1.getY();
+                        float diffX = e2.getX() - e1.getX();
+                        if (Math.abs(diffX) > Math.abs(diffY)) {
+                            if (Math.abs(diffX) > SWIPE_DISTANCE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                                if (diffX > 0) {
+//                                    Toast.makeText(MainActivity.this, "Right", Toast.LENGTH_SHORT).show();
+                                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                            .requestEmail()
+                                            .build();
+                                    mGoogleSignInClient = GoogleSignIn.getClient(Register.this, gso);
+                                    mGoogleSignInClient.signOut().addOnCompleteListener(Register.this, new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            startActivity(new Intent(Register.this, Login.class));
+                                            overridePendingTransition(R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                            finish();
+                                        }
+                                    });
+
+                                } else {
+                                    //Left
+//                                    Toast.makeText(MainActivity.this, "Left", Toast.LENGTH_SHORT).show();
+                                }
+                                return true;
+                            }
+                        } else if (Math.abs(diffY) > SWIPE_DISTANCE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                            if (diffY > 0) {
+                                //Down
+//                                Toast.makeText(ListView.this, "Down", Toast.LENGTH_SHORT).show();
+//                                textInputLayout.setTranslationY(200);
+//                                textInputLayout.setAlpha(0);
+//                                textInputLayout.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(0).start();
+                            } else {
+//                                CreateTaskBotttomSheetFragment createTaskBotttomSheetFragment = new CreateTaskBotttomSheetFragment();
+//                                createTaskBotttomSheetFragment.show(getSupportFragmentManager(), createTaskBotttomSheetFragment.getTag());
+                            }
+                            return true;
+                        }
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                    return false;
+                }
+            };
+            gestureDetector = new GestureDetector(simpleOnGestureListener);
+            view.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            return gestureDetector.onTouchEvent(motionEvent);
+        }
+    }
+
     public void initializeUI() {
         random = new Random();
         register_loader = findViewById(R.id.register_loader);
         register_loader.setVisibility(View.INVISIBLE);
         olduser = findViewById(R.id.olduser);
+        view_register = findViewById(R.id.scroll_register);
         register_spinner_semester = findViewById(R.id.register_select_semester);
         register_degree_spinner = findViewById(R.id.register_select_degree);
         register_dob_layout = findViewById(R.id.register_dateofbirth_layout);

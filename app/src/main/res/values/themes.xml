@@ -3,7 +3,7 @@
     <style name="Theme.CollegeProject" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_color</item>
-        <item name="colorPrimaryVariant">@color/taskbar_color</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/main_color</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -20,7 +20,7 @@
     <style name="Theme.With_Action_Bar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_color</item>
-        <item name="colorPrimaryVariant">@color/taskbar_color</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/main_color</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -82,7 +82,7 @@
 
     <style name="SecuritySwitch" parent="Widget.AppCompat.CompoundButton.Switch">
         <item name="colorPrimary">@color/main_color</item>
-        <item name="colorPrimaryVariant">@color/taskbar_color</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/main_color</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/main_color</item>
@@ -92,7 +92,7 @@
 
     <style name="ProgressDialog" parent="ProgressDialog" tools:ignore="ResourceCycle">
         <item name="colorPrimary">@color/main_color</item>
-        <item name="colorPrimaryVariant">@color/taskbar_color</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/main_color</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/main_color</item>

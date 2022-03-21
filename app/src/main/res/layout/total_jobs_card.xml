@@ -13,7 +13,8 @@
         android:layout_height="match_parent"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        android:padding="5dp">
+        android:padding="5dp"
+        app:cardCornerRadius="25dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +32,7 @@
                     android:id="@+id/company_logo_image"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:layout_gravity="top|center"
+                    android:layout_gravity="center"
                     android:layout_margin="10dp"
                     android:background="@color/transparent"
                     android:src="@drawable/main_logo" />
@@ -125,35 +126,6 @@
 
                         </LinearLayout>
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="2dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_contacts_black" />
-
-
-                        <TextView
-                            android:id="@+id/card_contact_number_total"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="2dp"
-                            android:fontFamily="@font/opensanslight"
-                            android:text="Contact Number 1"
-                            android:textColor="@color/main_color"
-                            android:textSize="12dp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:mk_color="@color/main_color"
-        app:mk_type="TwinFishesSpinner"/>
+        app:mk_type="TwinFishesSpinner" />
 
     <TextView
         android:id="@+id/on_null_job_applied_text"

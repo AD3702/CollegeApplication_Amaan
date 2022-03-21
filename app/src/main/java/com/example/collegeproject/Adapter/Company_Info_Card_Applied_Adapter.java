@@ -21,6 +21,7 @@ import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.example.collegeproject.Activity.CompanyCard;
 import com.example.collegeproject.Database.Applicationdatum;
 import com.example.collegeproject.R;
+import com.squareup.picasso.Picasso;
 import com.tuyenmonkey.mkloader.MKLoader;
 
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class Company_Info_Card_Applied_Adapter extends RecyclerView.Adapter<Comp
         public Button applied_btn, apply_btn;
         public CardView company_info_applied_card_mainview;
         public ImageView company_logo;
-        public TextView card_company_name, card_job_post, card_job_salary, card_contact_number, card_job_location;
+        public TextView card_company_name, card_job_post, card_job_salary, card_job_location;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,7 +105,6 @@ public class Company_Info_Card_Applied_Adapter extends RecyclerView.Adapter<Comp
             card_company_name = itemView.findViewById(R.id.card_company_name);
             card_job_post = itemView.findViewById(R.id.card_job_post);
             card_job_salary = itemView.findViewById(R.id.card_salary);
-            card_contact_number = itemView.findViewById(R.id.card_contact_number);
             card_job_location = itemView.findViewById(R.id.card_job_location);
             company_logo = itemView.findViewById(R.id.company_logo_image_1);
         }
@@ -115,10 +115,11 @@ public class Company_Info_Card_Applied_Adapter extends RecyclerView.Adapter<Comp
             holder.card_company_name.setText(applicationdatum.getCompanyName());
             holder.card_job_post.setText(applicationdatum.getJobPost());
             holder.card_job_salary.setText(applicationdatum.getJobSalary());
-            holder.card_contact_number.setText(applicationdatum.getCompanyContactNumber());
             String area = applicationdatum.getCompanyArea();
             String company_logo_string = applicationdatum.getCompanyLogo();
-            new DownloadImageTaskImageView(holder.company_logo,mkLoader).execute(company_logo_string);
+            Picasso.get().load(company_logo_string).into(holder.company_logo);
+            mkLoader.setVisibility(View.INVISIBLE);
+//            new DownloadImageTaskImageView(holder.company_logo, mkLoader).execute(company_logo_string);
             String location = applicationdatum.getCompanyLocation();
             String main_loc = area + ", " + location;
             holder.card_job_location.setText(main_loc);

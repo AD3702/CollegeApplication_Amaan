@@ -20,6 +20,7 @@ import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeWarningDialog;
 import com.example.collegeproject.Activity.CompanyCard;
 import com.example.collegeproject.Database.Applicationdatum;
 import com.example.collegeproject.R;
+import com.squareup.picasso.Picasso;
 import com.tuyenmonkey.mkloader.MKLoader;
 
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class Total_Jobs_Adapter extends RecyclerView.Adapter<Total_Jobs_Adapter.
         public CardView company_info_applied_card_mainview;
         public ImageView company_logo;
         public MKLoader image_loader_total;
-        public TextView card_company_name, card_job_post, card_job_salary, card_contact_number, card_job_location, approve_reject_check;
+        public TextView card_company_name, card_job_post, card_job_salary, card_job_location, approve_reject_check;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,7 +94,6 @@ public class Total_Jobs_Adapter extends RecyclerView.Adapter<Total_Jobs_Adapter.
             this.card_company_name = itemView.findViewById(R.id.card_company_name_total);
             this.card_job_post = itemView.findViewById(R.id.card_job_post_total);
             this.card_job_salary = itemView.findViewById(R.id.card_salary_total);
-            this.card_contact_number = itemView.findViewById(R.id.card_contact_number_total);
             this.card_job_location = itemView.findViewById(R.id.card_job_location_total);
             this.approve_reject_check = itemView.findViewById(R.id.approved_rejected_tv);
             company_logo = itemView.findViewById(R.id.company_logo_image);
@@ -108,11 +108,12 @@ public class Total_Jobs_Adapter extends RecyclerView.Adapter<Total_Jobs_Adapter.
             holder.card_company_name.setText(applicationdatum.getCompanyName());
             holder.card_job_post.setText(applicationdatum.getJobPost());
             holder.card_job_salary.setText(applicationdatum.getJobSalary());
-            holder.card_contact_number.setText(applicationdatum.getCompanyContactNumber());
             String area = applicationdatum.getCompanyArea();
             String location = applicationdatum.getCompanyLocation();
             String company_logo_string = applicationdatum.getCompanyLogo();
-            new DownloadImageTaskImageView(holder.company_logo, holder.image_loader_total).execute(company_logo_string);
+            Picasso.get().load(company_logo_string).into(holder.company_logo);
+            holder.image_loader_total.setVisibility(View.INVISIBLE);
+//            new DownloadImageTaskImageView(holder.company_logo, holder.image_loader_total).execute(company_logo_string);
             String main_loc = area + ", " + location;
             holder.card_job_location.setText(main_loc);
             if (applicationdatum.getApplicationResponseId().equals("0")) {

@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -29,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
 import com.example.collegeproject.Adapter.DownLoadImageOffline;
@@ -98,6 +101,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     File file;
     Boolean storage_permission_allowed = false;
     private static final int STORAGE_PERMISSION_CODE = 123;
+    SwipeListener swipeListener;
+    CoordinatorLayout coordinatorLayout_login;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -114,6 +119,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         newuser.setOnClickListener(this);
         login_page_btn.setOnClickListener(this);
         imageButton_google_login.setOnClickListener(this);
+        swipeListener = new SwipeListener(coordinatorLayout_login);
         roomDB = RoomDB.getInstance(this.getApplicationContext());
     }
 
@@ -153,6 +159,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         main_layout = findViewById(R.id.main_lin_layout);
         main_login_text = findViewById(R.id.main_login_text);
         sub_text = findViewById(R.id.sub_text);
+        coordinatorLayout_login = findViewById(R.id.coordinator_login);
         header_image = findViewById(R.id.header_image);
         loginActivity = this;
         login_toolbar = findViewById(R.id.toolbar_actionbar_login_main);
@@ -206,9 +213,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         if (storage_permission_allowed == true) {
             if (view == newuser) {
-                Intent intent = new Intent(Login.this, Register.class);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
-                startActivity(intent);
+                startActivity(new Intent(Login.this, Register.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
             }
 
@@ -231,7 +237,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             }
             if (view == forgot_pass) {
                 startActivity(new Intent(Login.this, ForgotPassword.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         } else {
             checkWriteExternalPermission();
@@ -325,7 +331,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         editor.putString(REGISTER_EMAIL, user_email);
                         editor.commit();
                         startActivity(new Intent(Login.this, Register.class));
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         finish();
                     }
                 } catch (Exception e) {
@@ -623,6 +629,69 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
 
     }*/
+
+    private class SwipeListener implements View.OnTouchListener {
+
+        GestureDetector gestureDetector;
+
+        SwipeListener(View view) {
+            int SWIPE_DISTANCE_THRESHOLD = 250;
+            int SWIPE_VELOCITY_THRESHOLD = 250;
+
+            GestureDetector.SimpleOnGestureListener simpleOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDown(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                    boolean result = false;
+                    try {
+                        float diffY = e2.getY() - e1.getY();
+                        float diffX = e2.getX() - e1.getX();
+                        if (Math.abs(diffX) > Math.abs(diffY)) {
+                            if (Math.abs(diffX) > SWIPE_DISTANCE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                                if (diffX > 0) {
+//                                    Toast.makeText(MainActivity.this, "Right", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    //Left
+//                                    Toast.makeText(MainActivity.this, "Left", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(Login.this, Register.class));
+                                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                    finish();
+                                }
+                                return true;
+                            }
+                        } else if (Math.abs(diffY) > SWIPE_DISTANCE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                            if (diffY > 0) {
+                                //Down
+//                                Toast.makeText(ListView.this, "Down", Toast.LENGTH_SHORT).show();
+                            }
+//                                textInputLayout.setTranslationY(200);
+//                                textInputLayout.setAlpha(0);
+//                                textInputLayout.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(0).start();
+                        } else {
+//                                CreateTaskBotttomSheetFragment createTaskBotttomSheetFragment = new CreateTaskBotttomSheetFragment();
+//                                createTaskBotttomSheetFragment.show(getSupportFragmentManager(), createTaskBotttomSheetFragment.getTag());
+                        }
+                        return true;
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                    return false;
+                }
+            };
+            gestureDetector = new GestureDetector(simpleOnGestureListener);
+            view.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            return gestureDetector.onTouchEvent(motionEvent);
+        }
+    }
+
 }
 
 

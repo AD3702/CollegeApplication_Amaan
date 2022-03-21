@@ -27,7 +27,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -207,7 +206,6 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
             mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             mDialog.setContentView(R.layout.dialog_fullscreen);
             ImageView full_screen_image = mDialog.findViewById(R.id.full_screen_image);
-            ImageButton back_profile_image_btn = mDialog.findViewById(R.id.back_profile_photo_btn);
             FloatingActionButton save_image = mDialog.findViewById(R.id.save_image_gallery);
             save_image.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -222,12 +220,6 @@ public class EditUserProfile extends AppCompatActivity implements View.OnClickLi
                         d.draw(canvas);
                     }
                     saveImage(bitmap);
-                }
-            });
-            back_profile_image_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mDialog.dismiss();
                 }
             });
             if (uri_image_edit_user_prof == null) {

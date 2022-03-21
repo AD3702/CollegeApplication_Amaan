@@ -1,16 +1,19 @@
-package com.example.collegeproject.Activity;
+package com.example.collegeproject.Fragment;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +31,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TotalApplications extends AppCompatActivity {
+
+public class TotalApplicationFragment extends Fragment {
 
     Toolbar toolbar_total_jobs;
     String user_id;
@@ -41,20 +45,22 @@ public class TotalApplications extends AppCompatActivity {
     MKLoader mkLoader;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_total_applications);
-        mkLoader = findViewById(R.id.total_jobs_loader);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_total_application, container, false);
+        mkLoader = view.findViewById(R.id.total_jobs_loader);
         mkLoader.setVisibility(View.INVISIBLE);
-        recyclerView_total_jobs = findViewById(R.id.total_jobs_recycle);
-        textView_on_null_job_response = findViewById(R.id.on_null_job_response_text);
-        toolbar_total_jobs = findViewById(R.id.toolbar_actionbar_total_jobs);
-        toolbar_total_jobs.setBackground(new ColorDrawable(ContextCompat.getColor(TotalApplications.this, R.color.main_color)));
-        toolbar_total_jobs.setTitleTextColor(ContextCompat.getColor(TotalApplications.this, R.color.white));
+        recyclerView_total_jobs = view.findViewById(R.id.total_jobs_recycle);
+        textView_on_null_job_response = view.findViewById(R.id.on_null_job_response_text);
+        toolbar_total_jobs = view.findViewById(R.id.toolbar_actionbar_total_jobs);
+        toolbar_total_jobs.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.main_color)));
+        toolbar_total_jobs.setTitleTextColor(ContextCompat.getColor(getActivity(), R.color.white));
         toolbar_total_jobs.setTitle("Total Jobs");
-        sharedPreferences = getSharedPreferences(mypreference, MODE_PRIVATE);
+        sharedPreferences = getContext().getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         user_id = sharedPreferences.getString(USER_ID, "");
         load_total_jobs();
+        return view;
     }
 
     public void load_total_jobs() {
@@ -67,11 +73,11 @@ public class TotalApplications extends AppCompatActivity {
                 try {
                     mkLoader.setVisibility(View.INVISIBLE);
                     applicationdatumArrayList = (ArrayList<Applicationdatum>) response.body().getApplicationdata();
-                    Total_Jobs_Adapter total_jobs_adapter = new Total_Jobs_Adapter(TotalApplications.this, applicationdatumArrayList, mkLoader);
-                    recyclerView_total_jobs.setLayoutManager(new LinearLayoutManager(TotalApplications.this));
+                    Total_Jobs_Adapter total_jobs_adapter = new Total_Jobs_Adapter(getActivity(), applicationdatumArrayList, mkLoader);
+                    recyclerView_total_jobs.setLayoutManager(new LinearLayoutManager(getActivity()));
                     recyclerView_total_jobs.setAdapter(total_jobs_adapter);
                     int resId = R.anim.layout_recycle_animation;
-                    LayoutAnimationController layoutAnimationController = AnimationUtils.loadLayoutAnimation(TotalApplications.this, resId);
+                    LayoutAnimationController layoutAnimationController = AnimationUtils.loadLayoutAnimation(getActivity(), resId);
                     recyclerView_total_jobs.setLayoutAnimation(layoutAnimationController);
                 } catch (Exception e) {
                     mkLoader.setVisibility(View.VISIBLE);

@@ -1,56 +1,76 @@
 package com.example.collegeproject.Activity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.collegeproject.Fragment.CourseHeader;
 import com.example.collegeproject.Fragment.HomeFragment;
 import com.example.collegeproject.Fragment.SettingsFragment;
+import com.example.collegeproject.Fragment.TotalApplicationFragment;
+import com.example.collegeproject.Fragment.UploadResumeFragment;
 import com.example.collegeproject.R;
-import com.luseen.spacenavigation.SpaceItem;
+import com.gauravk.bubblenavigation.BubbleNavigationConstraintView;
+import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.luseen.spacenavigation.SpaceNavigationView;
-import com.luseen.spacenavigation.SpaceOnClickListener;
 
-public class MasterActivity extends AppCompatActivity implements SpaceOnClickListener {
+public class MasterActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     Bundle savedInstanceState;
     private long pressedTime;
     public static MasterActivity masteractivity;
+    SpaceNavigationView spaceNavigationView;
+    BubbleNavigationConstraintView ssCustomBottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master);
-
         this.savedInstanceState = savedInstanceState;
         masteractivity = this;
-        loadData();
+//        loadData();
+        loaddata2();
     }
 
-    public void loadData() {
-        SpaceNavigationView spaceNavigationView = (SpaceNavigationView) findViewById(R.id.bottom_navigation);
-        spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_home_black));
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_course_black));
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_total_jobs));
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_settings_black_24));
-        spaceNavigationView.setCentreButtonIcon(R.drawable.ic_resume_upload_white);
-        /*spaceNavigationView.setActiveSpaceItemColor(R.color.primary);
-        spaceNavigationView.setInActiveSpaceItemColor(R.color.iconscolor);*/
-        spaceNavigationView.setSpaceItemIconSize(64);
-        spaceNavigationView.setCentreButtonColor(ContextCompat.getColor(this, R.color.main_color));
-        spaceNavigationView.setSpaceOnClickListener(this);
+    public void loaddata2() {
+        ssCustomBottomNavigation = findViewById(R.id.bottom_navigation_);
+        ssCustomBottomNavigation.setNavigationChangeListener(new BubbleNavigationChangeListener() {
+            @Override
+            public void onNavigationChanged(View view, int position) {
+                if (position == 0) {
+                    HomeFragment home = new HomeFragment();
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.nav_host_fragment, home);
+                    ft.commit();
+                }
+                if (position == 2) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.nav_host_fragment, new UploadResumeFragment());
+                    ft.commit();
+                }
+                if (position == 1) {
+                    TotalApplicationFragment totalApplicationFragment = new TotalApplicationFragment();
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.nav_host_fragment, totalApplicationFragment);
+                    ft.commit();
+                }
+                if (position == 3) {
+                    SettingsFragment settingsFragment = new SettingsFragment();
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.nav_host_fragment, settingsFragment);
+                    ft.commit();
+                }
+            }
+        });
         HomeFragment home = new HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.nav_host_fragment, home);
         ft.commit();
     }
+
 
     public void oneditprofbackpressed() {
         SettingsFragment settingsFragment = new SettingsFragment();
@@ -59,72 +79,10 @@ public class MasterActivity extends AppCompatActivity implements SpaceOnClickLis
         ft.commit();
     }
 
-    @Override
-    public void onCentreButtonClick() {
-        Intent intent = new Intent(MasterActivity.this, UploadResume.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onItemClick(int itemIndex, String itemName) {
-        if (itemIndex == 0) {
-            HomeFragment home = new HomeFragment();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.nav_host_fragment, home);
-            ft.commit();
-        }
-        if (itemIndex == 1) {
-            CourseHeader courseHeader = new CourseHeader();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.nav_host_fragment, courseHeader);
-            ft.commit();
-        }
-        if (itemIndex == 2) {
-            startActivity(new Intent(MasterActivity.this, TotalApplications.class));
-        }
-        if (itemIndex == 3) {
-            SettingsFragment settingsFragment = new SettingsFragment();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.nav_host_fragment, settingsFragment);
-            ft.commit();
-        }
-
-    }
-
-    @Override
-    public void onItemReselected(int itemIndex, String itemName) {
-        if (itemIndex == 0) {
-            HomeFragment home = new HomeFragment();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.nav_host_fragment, home);
-            ft.commit();
-        }
-        if (itemIndex == 1) {
-            CourseHeader courseHeader = new CourseHeader();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.nav_host_fragment, courseHeader);
-            ft.commit();
-        }
-        if (itemIndex == 2) {
-            startActivity(new Intent(MasterActivity.this, TotalApplications.class));
-        }
-        if (itemIndex == 3) {
-            SettingsFragment settingsFragment = new SettingsFragment();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.nav_host_fragment, settingsFragment);
-            ft.commit();
-        }
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-
 
     @Override
     public void onBackPressed() {
-        if (pressedTime + 2000 > System.currentTimeMillis()) {
+        if (pressedTime + 1000 > System.currentTimeMillis()) {
             super.onBackPressed();
             MainActivity.mainActivity.finish();
             finish();
@@ -133,6 +91,7 @@ public class MasterActivity extends AppCompatActivity implements SpaceOnClickLis
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.nav_host_fragment, home);
             ft.commit();
+            ssCustomBottomNavigation.setCurrentActiveItem(0);
         }
         pressedTime = System.currentTimeMillis();
     }
